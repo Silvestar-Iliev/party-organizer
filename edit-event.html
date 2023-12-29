@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css">
+    <title>Edit event</title>
+</head>
+<body>
+    <form class="add-person">
+        <label for="name">Събитие</label>
+        <input 
+            type="text" 
+            id='name' 
+            name='name'
+            required 
+            placeholder="Име на събитието" 
+        />
+        <label for="seats">Свободни места</label>
+        <input 
+            type="number" 
+            id='seats' 
+            name='seats' 
+            required 
+            placeholder="Положително число" 
+        />
+        <label for="fee">Куверт</label>
+        <input 
+            type="number" 
+            id='fee' 
+            name='fee' 
+            required 
+            placeholder="Положително число" 
+        />
+        <label for="extraMoney">Такса спокойствие</label>
+        <input 
+            type="number" 
+            id='extraMoney' 
+            name='extraMoney' 
+            required 
+            placeholder="Положително число / 0" 
+        />        
+        <label for="specialFee">Специален куверт</label>
+        <input 
+            type="number" 
+            id='specialFee' 
+            name='specialFee' 
+            required 
+            placeholder="Положително число / 0" 
+        />
+        <label for="artists">Брой артисти</label>
+        <input 
+            type="number" 
+            id='artists' 
+            name='artists' 
+            required 
+            placeholder="Положително число / 0" 
+        />
+        <button class="btn-submit" onclick="onEditEvent()">Запази промените</button>
+        <p>
+            <a class="link" href="./index.html">Към началната страница</a>
+        </p>
+    </form> 
+
+
+
+    <script>
+        
+        const event = JSON.parse(localStorage.getItem('event'));
+            
+            if(event){
+                document.querySelector('.btn-submit').disabled = false;
+            }else{
+                document.querySelector('.btn-submit').disabled = true;
+            }   
+
+            const nameEl = document.querySelectorAll('input')[0];
+            const seatsEl = document.querySelectorAll('input')[1];
+            const feeEl = document.querySelectorAll('input')[2];
+            const extraMoneyEl = document.querySelectorAll('input')[3];
+            const specialFeeEl = document.querySelectorAll('input')[4];
+            const artistEl = document.querySelectorAll('input')[5];
+
+
+            nameEl.value = event.name;
+            seatsEl.value = event.seats;
+            feeEl.value = event.fee;
+            extraMoneyEl.value = event.extraMoney;
+            specialFeeEl.value = event.specialFee;
+            artistEl.value = event.artists;
+
+
+            const onEditEvent = () =>{
+
+            try {
+                
+                if(nameEl.value.length < 4){
+                    throw new Error("Името на събитието трябва да съдържа поне 4 символа")
+                }
+
+                if(seatsEl.value < 1){
+                    throw new Error("Местата трябва да са положително число")
+                }
+
+                if(feeEl.value < 1){
+                    throw new Error("Куверта трябва да е положително число")
+                }
+
+                if(extraMoneyEl.value < 0){
+                    throw new Error("Допълнителните пари трябва да са положително число или 0")
+                }
+
+                if(specialFeeEl.value < 0){
+                    throw new Error("Специалния куверт трябва да е положително число или 0")
+                }
+
+                if(artistEl.value < 0){
+                    throw new Error("Броя артисти трябва да са положително число или 0")
+                }
+
+
+                const storedObj = 
+                                {
+                                    name: nameEl.value, 
+                                    seats: Number(seatsEl.value), 
+                                    fee: Number(feeEl.value), 
+                                    extraMoney: Number(extraMoneyEl.value),
+                                    specialFee: Number(specialFeeEl.value),  
+                                    artists: Number(artistEl.value),
+                                    employees: event.employees, 
+                                    vip: event.vip,
+                                    additionalCosts: event.additionalCosts,
+                                };
+
+                localStorage.setItem('event', JSON.stringify(storedObj));
+                nameEl.value = '';
+                seatsEl.value = '';
+                feeEl.value = '';
+                extraMoneyEl.value = '';
+                specialFeeEl.value = '';
+                artistEl.value = '';
+
+                
+                window.location.href = "./index.html";
+
+                alert(`Успешно променихте събитие "${storedObj.name}"!`)
+            } catch (error) {
+                alert(error.message);        
+            }
+            
+            }
+
+        </script>
+</body>
+</html>

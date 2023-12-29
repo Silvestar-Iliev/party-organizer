@@ -1,0 +1,380 @@
+﻿html, body {
+  min-height: 100%; /* или height: 100%; */
+}
+
+body {
+    text-align: center;
+    background: url('./Christmas-night.jpg');
+    background-size: cover;
+    background-position: center;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 50px;
+  }
+
+  .navigation a {
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    padding: 20px 40px;
+    border-radius: 8px;
+    margin: 0px 20px;
+    border: 2px solid lightgrey;
+}
+
+.index-header{
+  margin-bottom: 300px;
+}
+
+.navigation a:hover {
+    background-color: green;
+}
+
+.add-person{
+  display: flex;
+  flex-direction: column;
+  padding: 20px 50px;
+  background-color: antiquewhite;
+  border-radius: 8px;
+  gap: 10px;
+}
+
+
+.add-person label {
+  font-size: large;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.add-person input {
+  font-size: large;
+}
+
+.add-person select {
+  font-size: large;
+}
+
+.add-person .btn-submit {
+  padding: 10px 20px;
+  font-weight: bold;
+  color: black;
+  border-radius: 8px;
+  background-color: orange;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.add-person .btn-submit:hover {
+  cursor: pointer;
+  background-color: green;
+  color: orange;
+}
+
+.add-person .btn-submit:disabled {
+  cursor: default;
+  color: black;
+  background-color: gray;
+}
+
+.add-person p {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-person a {
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: bold;
+  color: black;
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: 2px solid black;
+}
+
+.add-person a:hover {
+  background-color: green;
+}
+
+/* Organizer pannel */
+
+.event-container{
+  background-color: antiquewhite;
+  padding: 40px 80px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  margin-bottom: 100px;
+}
+
+.noEvent-container h1{
+  color: antiquewhite;
+}
+
+.link {
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: orange;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 2px solid  orange;
+}
+
+.link:hover {
+  background-color: green;
+}
+
+
+.event-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-name {
+  margin-bottom: 20px; 
+}
+
+.info-name button {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: red;
+  padding: 10px 20px;
+  border-radius: 4px;
+  border: 2px solid black;
+}
+
+.info-name button:hover {
+  background-color: red;
+  cursor: pointer;
+  color: white;
+}
+
+.info-people-money {
+  display: flex;
+  gap: 20px;
+}
+
+.info-people {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding: 30px;
+  background-color: bisque;
+  border-radius: 8px;
+
+}
+
+.info-money {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding: 30px;
+  background-color: bisque;
+  border-radius: 8px;
+}
+
+.info-people-money p{
+  font-weight: 600;
+}
+
+.grey {
+  color: rgb(70, 56, 56);
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.dollar {
+  color: green;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.event-lists ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.event-lists li {
+  display: flex;
+}
+
+.span-num {
+  width: 15%;
+}
+
+.span-name {
+  width: 60%;
+}
+
+.span-menu {
+  width: 15%;
+}
+
+.event-lists li:hover{
+  background-color: lightgreen;
+}
+
+.event-lists span {
+  /* flex: 1; */
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.event-lists button {
+  padding: 5px 10px;
+  color: red;
+  background-color: white;
+  font-weight: bold;
+}
+
+.event-lists button:hover{
+  cursor: pointer;
+  background-color: red;
+  color: white;
+}
+
+h3{
+  padding: 10px 10px;
+  background-color:aquamarine
+}
+
+
+.menus-list {
+  list-style-type: none;
+}
+
+.menus-list span{
+  font-size: 18px;
+}
+
+.menus-list .span-count-menu{
+  font-size: 22px;
+  font-weight: bold;
+  color: orange;
+}
+
+.info-money div {
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.info-money div:nth-of-type(1){
+  background-color: #ccc;
+}
+
+.info-money div:nth-of-type(2){
+  background-color: aliceblue;
+}
+
+.info-money div:nth-of-type(3){
+  background-color: antiquewhite;
+}
+
+.info-money div:nth-of-type(4){
+  background-color: lightblue;
+}
+
+.info-money div:nth-of-type(5){
+  background-color: lightgreen;
+}
+
+#primary {
+  background-color: red;
+}
+
+.event-lists-additional{
+  list-style-type: none;
+}
+
+.additionals{
+  display: flex;
+  gap: 10px;
+}
+
+.additionals button{
+  padding: 3px 6px;
+  font-weight: bold;
+  color: black;
+  border-radius: 8px;
+  background-color: orange;
+}
+
+
+.additionals button:hover{
+  background-color: green;
+  cursor: pointer;
+}
+
+.event-lists-additional li{
+  margin-bottom: 10px;
+}
+
+.event-lists-additional li:hover{
+  background-color: lightgreen;
+}
+
+.additionaCost-delete-btn {
+  padding: 3px;
+  color: red;
+  background-color: white;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.additionaCost-delete-btn:hover{
+  cursor: pointer;
+  background-color: red;
+  color: white;
+}
+
+
+@media (width <= 640px) {
+    
+  .navigation{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .event-container{
+    padding: 20px 40px;
+    margin: 30px 20px 100px 20px;
+  }
+
+  .info-people-money{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .menus-list{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .additionals-header{
+    align-self: center;
+  }
+
+  .additionals{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+}

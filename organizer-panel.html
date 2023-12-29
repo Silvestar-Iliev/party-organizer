@@ -1,0 +1,407 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css">
+    <title>Organizer panel</title>
+</head>
+<body>
+    <div class="noEvent-container">
+        <h1>Все още няма създадено събитие</h1>
+        <p class="fixed-link">
+            <a class="link" href="./index.html">Към началната страница</a>
+        </p>
+    </div>
+    <section class="event-container">
+        <p>
+            <a class="link" href="./index.html">Към началната страница</a>
+        </p>
+        <div class="event-info">
+            <div class="info-name">
+                <h1>Събитие: <span class="eventName"></span></h1>
+                <button onclick="onDeleteEventClick()">Изтрии събитието</button>                    
+            </div>
+            <div class="info-people-money">
+                <div class="info-people">
+                        <p>Всички места: <span class="grey allSeats"></span></p>
+                        <p>Свободни места към момента: <span class="grey freeSeats"></span></p>
+                        <p>Всички гости: <span class="grey allGuests"></span></p>
+                        <p>Служители (вс. даващи пари): <span class="grey employees"></span></p> 
+                        <p>VIP: <span class="grey vip"></span></p>
+                        <p>Артисти: <span class="grey artists"></span></p>                     
+                </div>
+                <div class="info-money">
+                    <div>
+                        <p>Обща цена на обикновен куверт: 
+                            <span class="dollar"> $</span> 
+                            <span class="grey price"></span> 
+                        </p>
+                        <p>Цена на специален куверт: 
+                            <span class="dollar"> $</span> 
+                            <span class="grey specialPrice"></span> 
+                        </p>                        
+                    </div>
+                    <div>
+                        <p>Всички събрани пари:
+                            <span class="dollar"> $</span> 
+                            <span class="grey totalMoney"></span>
+                        </p>
+                        <p>Събрани пари за допълнителни разходи: 
+                            <span class="dollar"> $</span> 
+                            <span class="grey totalExtraMoney"></span>
+                        </p>                          
+                    </div>
+                    <div>
+                        <p>Дължимо за обикновени куверти: 
+                            <span class="dollar"> $</span>
+                            <span class="grey fees"></span> 
+                        </p>
+                        <p>Дължимо за специални куверти: 
+                            <span class="dollar"> $</span> 
+                            <span class="grey specialFees"></span>
+                        </p>
+                        <p>Общо дължимо за всички куверти: 
+                            <span class="dollar"> $</span> 
+                            <span class="grey allFees"></span>
+                        </p>                        
+                    </div>
+                    <div class="info-additional">
+                        <p>Допълнителни разходи:</p> 
+                        <ul class="event-lists-additional">
+
+                        </ul> 
+                         
+                        <p>Общо: 
+                            <span class="dollar"> $</span> 
+                            <span class="grey total-additional">0</span>
+                        </p>                        
+                    </div>
+                    <div class="finalSum-container">
+                        <p>Оставащи пари след плащане на всички куверти и разходи: 
+                            <span class="dollar"> $</span> 
+                            <span class="grey finalSum"></span>
+                        </p>                        
+                    </div>
+                    <div>
+                        <ul class="menus-list">
+
+                        </ul>                        
+                    </div>
+                    <p class="additionals-header">Добави допълнителен разход:</p>
+                    <div class="additionals">
+                        <span>Разход:</span><input class="additional-description" type="text">
+                        <span>Цена:</span><input class="additional-cost" type="number">
+                        <button onclick="onAddAdditionalCost()">Добави</button>
+                    </div>
+                </div>                    
+            </div>
+
+        </div>
+        <div class="event-lists">
+            <h3>VIP:</h3>
+            <ul class="event-lists-vip">
+ 
+            </ul>
+            <h3>Служители:</h3>
+            <ul class="event-lists-employees">
+
+            </ul>                
+        </div>
+
+
+        <p>
+            <a class="link" href="./index.html">Към началната страница</a>
+        </p>
+    </section>
+
+    <script>
+
+        const event = JSON.parse(localStorage.getItem('event'));
+
+        if (!event) {
+            document.querySelector('.noEvent-container').style.display = 'block';
+            document.querySelector('.event-container').style.display = 'none';
+        } else {
+            document.querySelector('.noEvent-container').style.display = 'none';
+            document.querySelector('.event-container').style.display = 'block';
+        }
+
+        if (event) {
+            
+            let vip = event.vip.length;
+            let employees = Object.values(event.employees)
+                .reduce((acc, curr) => {
+                    return acc + curr.length;
+                }, 0);
+            let artists = event.artists;
+            let menus = [];
+            let menusCount = {};
+            
+            Object.values(event.employees).forEach(x => {
+                x.forEach(y => menus.push(y.menu))
+                
+            });
+            
+            event.vip.forEach(x => menus.push(x.menu));
+
+            menus.forEach(x => {
+
+                if(menusCount[x]){
+                    menusCount[x]++;
+                }else{
+                    menusCount[x] = 1;
+                }
+
+            })
+
+            const allPeople = vip + employees + artists;
+            const fee = Number(event.fee);
+            const extraMoney = Number(event.extraMoney);
+            const price = fee + extraMoney;
+            const specialFee = Number(event.specialFee);
+            let totalAdditionalSum = 0;
+
+
+
+
+        // <div class="info-additional"> &  <div class="additionals"> - text content and submit logic
+            let ulAdditionalEl = document.querySelector('.event-lists-additional');
+            let spanTotalAdditionalEl = document.querySelector('.total-additional');
+            
+            function onDeleteAdditionalCost(name, index){
+                // eslint-disable-next-line no-restricted-globals
+                const result = confirm(`Сигурни ли сте, че искате да изтриете този разход "${name}"`);
+
+                if (result) {
+                    event.additionalCosts.splice(index, 1);
+
+                    localStorage.setItem('event', JSON.stringify(event));
+                    window.location.href = "./organizer-panel.html";
+                };
+            }
+
+            if(event.additionalCosts.length !== 0){
+	   
+                event.additionalCosts.forEach((x, i) => {
+
+                    let liEl = document.createElement('li');
+                    let spanDesc = document.createElement('span');
+                    let spanDollar = document.createElement('span');
+                    spanDollar.classList.add('dollar');
+                    spanDollar.textContent = ' $ '
+                    let spanCost = document.createElement('span');
+                    spanCost.classList.add('grey');
+                    let btnEl = document.createElement('button');
+                    btnEl.classList.add('additionaCost-delete-btn');
+                    btnEl.addEventListener('click', () => onDeleteAdditionalCost(x[0], i));
+
+                    spanDesc.textContent = x[0] + ':';
+                    spanCost.textContent = x[1];
+                    btnEl.textContent = 'X';
+
+		            totalAdditionalSum += Number(x[1]);
+
+                    liEl.appendChild(spanDesc);
+                    liEl.appendChild(spanDollar);
+                    liEl.appendChild(spanCost);
+                    liEl.appendChild(btnEl);
+
+                    ulAdditionalEl.appendChild(liEl);
+                })
+
+		//event.additionalCosts.reduce((acc, curr) => acc + Number(curr[1]), 0 )
+
+                spanTotalAdditionalEl.textContent = totalAdditionalSum;
+            }
+            
+
+            function onAddAdditionalCost() {
+                let additionalDesc = document.querySelector('.additional-description');
+                let additionalCost = document.querySelector('.additional-cost');
+                
+
+                try {
+                
+                if(additionalDesc.value.length < 3){
+                    throw new Error("Описанието трябва да съдържа поне 3 символа")
+                }
+
+                if(additionalCost.value < 1){
+                    throw new Error("Цената трябва да е положително число")
+                }
+
+
+                event.additionalCosts.push([ additionalDesc.value, additionalCost.value ]);
+
+                localStorage.setItem('event', JSON.stringify(event));
+
+
+
+                alert(`Успешно добавихте разход "${additionalDesc.value}"!`)
+
+                additionalDesc.value = '';
+                additionalCost.value = '';
+
+		window.location.href = "./organizer-panel.html";
+
+                }catch(error){
+                    alert(error.message);  
+                }
+                
+            }
+
+	   
+
+
+
+            const finalSum = (employees * price) - (((vip + employees) * fee) + (artists * specialFee)) - totalAdditionalSum;
+
+            // <div class="info-people"> - text content
+            document.querySelector('.eventName').textContent = event.name;
+            document.querySelector('.allSeats').textContent = event.seats;
+            document.querySelector('.freeSeats').textContent = event.seats - allPeople;
+            document.querySelector('.allGuests').textContent = allPeople;
+            document.querySelector('.employees').textContent = employees;
+            document.querySelector('.vip').textContent = vip;
+            document.querySelector('.artists').textContent = artists;
+
+
+            // <div class="info-money"> - text content
+            document.querySelector('.price').textContent = price;
+            document.querySelector('.specialPrice').textContent = specialFee;
+            document.querySelector('.totalMoney').textContent = employees * price;
+            document.querySelector('.fees').textContent = (vip + employees) * fee;
+            document.querySelector('.totalExtraMoney').textContent = employees * extraMoney;
+            document.querySelector('.specialFees').textContent = artists * specialFee;
+            document.querySelector('.allFees').textContent = ((vip + employees) * fee) + (artists * specialFee);
+            document.querySelector('.finalSum').textContent = finalSum;
+            
+            if (finalSum < 0) {
+                document.querySelector(".finalSum-container").setAttribute('id', 'primary')
+            }
+
+
+            // <ul class="menus-list"> - text content - menus
+            Object.entries(menusCount)
+                    .forEach(x => {
+                        let liEl = document.createElement('li');
+                        let spanElMenu = document.createElement('span');
+                        spanElMenu.textContent = `${x[0]} меню: `;
+                        let spanElCountMenu = document.createElement('span');
+                        spanElCountMenu.classList.add("span-count-menu");
+                        spanElCountMenu.textContent = x[1];
+
+                        // liEl.textContent = `Menu ${x[0]}: ${x[1]}`
+                        liEl.appendChild(spanElMenu);
+                        liEl.appendChild(spanElCountMenu);
+                        document.querySelector(".menus-list").appendChild(liEl)
+                    })
+                          
+
+            // <ul class="event-lists-vip"> - text content vip-guests
+            event.vip.forEach((x, i) => {
+                let liEl = document.createElement('li');
+                let spanNumEl = document.createElement('span');
+                spanNumEl.classList.add("span-num");
+                let spanNameEl = document.createElement('span');
+                spanNameEl.classList.add("span-name");
+                let spanMenuEl = document.createElement('span');
+                spanMenuEl.classList.add("span-menu");
+                let btnEl = document.createElement('button');
+                btnEl.addEventListener('click', () => onDeletePersonClick(x, i));
+
+                spanNumEl.textContent = 1 + i;
+                spanNameEl.textContent = x.name;
+                spanMenuEl.textContent = x.menu;
+                btnEl.textContent = 'X';
+
+                liEl.appendChild(spanNumEl);
+                liEl.appendChild(spanNameEl);
+                liEl.appendChild(spanMenuEl);
+                liEl.appendChild(btnEl);
+
+                document.querySelector(".event-lists-vip").appendChild(liEl)
+
+            })
+
+            
+            // <ul class="event-lists-employees"> - text content employees-guests
+            Object.keys(event.employees)
+                    .forEach((department) => {
+                        let departmentHeaderEl = document.createElement('h4');
+                        departmentHeaderEl.textContent = department;
+
+                        document.querySelector('.event-lists-employees').appendChild(departmentHeaderEl);
+
+
+                        event.employees[department].forEach((x, i) =>{
+                            let liEl = document.createElement('li');
+                            let spanNumEl = document.createElement('span');
+                            spanNumEl.classList.add("span-num");
+                            let spanNameEl = document.createElement('span');
+                            spanNameEl.classList.add("span-name");
+                            let spanMenuEl = document.createElement('span');
+                            spanMenuEl.classList.add("span-menu");
+                            let btnEl = document.createElement('button');
+                            btnEl.addEventListener('click', () => onDeletePersonClick(x, i));
+
+                            spanNumEl.textContent = 1 + i;
+                            spanNameEl.textContent = x.name;
+                            spanMenuEl.textContent = x.menu;
+                            btnEl.textContent = 'X';
+
+                            liEl.appendChild(spanNumEl);
+                            liEl.appendChild(spanNameEl);
+                            liEl.appendChild(spanMenuEl);
+                            liEl.appendChild(btnEl);
+
+                            document.querySelector(".event-lists-employees").appendChild(liEl)                            
+                        })
+                    }) 
+
+ 
+
+            function onDeletePersonClick(person, index) {
+                
+                // eslint-disable-next-line no-restricted-globals
+                const result = confirm(`Сигурни ли сте, че искате да изтриете гост "${person.name}"`);
+
+                if (result) {
+
+                    if(person.department === "VIP"){
+                        event.vip.splice(index, 1)
+                    }else{
+                        console.log(event.employees[person.department]);
+                        event.employees[person.department].splice(index, 1)
+                        
+                        if (event.employees[person.department].length === 0) {
+                            delete event.employees[person.department];
+                            
+                        }
+                    }
+                    localStorage.setItem('event', JSON.stringify(event));
+                    window.location.href = "./organizer-panel.html";
+                };
+            }
+                      
+
+            function onDeleteEventClick() {
+                        
+                // eslint-disable-next-line no-restricted-globals
+                const result = confirm(`Сигурни ли сте, че искате да изтриете събитие "${event.name}"`);
+
+                if (result) {
+                    localStorage.removeItem('event');
+
+                    window.location.href = "./index.html";
+                };
+            }
+
+
+ 
+        }
+
+    </script>
+</body>
+</html>

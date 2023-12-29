@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css">
+    <title>Add person</title>
+</head>
+<body>
+    <form class="add-person">
+        <label for="name">Име</label>
+        <input 
+            type="text" 
+            id='name' 
+            name='name'
+            required 
+            placeholder="Добави име" 
+        />
+        <label for="department">Структурна единица</label>
+        <select 
+            id="department" 
+            name="department"
+            required
+        >   
+            <option value=""></option>
+            <option value="ПНМ">ПНМ</option>
+            <option value="ПКПДГ">ПКПДГ</option>
+            <option value="Разследване">Разследване</option>
+            <option value="ГК">ГК</option>
+            <option value="ГН">ГН</option>
+	    <option value="ГП">ГП</option>
+            <option value="ПНО">ПНО</option>
+            <option value="ЧР">ЧР</option>
+            <option value="ОПП">ОПП</option>
+            <option value="УС">УС</option>
+            <option value="ИТ">ИТ</option>
+            <option value="АО">АО</option>
+            <option value="ЗЗКИ">ЗЗКИ</option>
+            <option value="Финанси">Финанси</option>
+            <option value="МГПС">МГПС</option>
+            <option value="НКЦ">НКЦ</option>
+            <option value="ОМП">ОМП</option>
+            <option value="СОВН">СОВН</option>
+            <option value="ОА">ОА</option>
+            <option value="Геодезия">Геодезия</option>
+	    <option value="Автомобилисти">Автомобилисти</option>
+	    <option value="Анализ и прогнози">Анализ и прогнози</option>
+            <option value="Директори">Директори</option>
+            <option value="РДГП Аерогари">РДГП Аерогари</option>
+            <option value="РДГП Драгоман">РДГП Драгоман</option>
+            <option value="РДГП Смолян">РДГП Смолян</option>
+            <option value="РДГП Елхово">РДГП Елхово</option>
+            <option value="РДГП Бургас">РДГП Бургас</option>
+            <option value="РДГП Русе">РДГП Русе</option>
+            <option value="РДГП Кюстендил">РДГП Кюстендил</option>
+            <option value="Други">Други</option>
+            <option value="VIP">VIP</option>
+        </select>
+        <label for="menu">Меню</label>
+        <input 
+            type="number" 
+            id='menu' 
+            name='menu' 
+            required 
+            placeholder="Положително число" 
+        />
+        <button class="btn-submit" onclick="onAddPersonSubmit()">Добави гост</button>
+        <p class="field">
+            <a class="link" href="./index.html">Към началната страница</a>
+        </p>
+    </form>
+
+
+    <script>
+
+        const event = JSON.parse(localStorage.getItem('event'));
+            
+        if(event){
+            document.querySelector('.btn-submit').disabled = false;
+        }else{
+            document.querySelector('.btn-submit').disabled = true;
+        }   
+
+        const nameEl = document.querySelectorAll('input')[0];
+        const menuEl = document.querySelectorAll('input')[1];
+        const departmentEl = document.querySelector('select');
+
+
+        const onAddPersonSubmit = () =>{
+                
+            try {
+                
+                if(nameEl.value.length < 1){
+                    throw new Error("Името на госта трябва да съдържа поне 1 символ")
+                }
+
+                if(menuEl.value < 1){
+                    throw new Error("Менюто трябва да е положително число")
+                }
+
+
+                const newPersonObj = 
+                                {
+                                    name: nameEl.value, 
+                                    menu: Number(menuEl.value), 
+                                    department: departmentEl.value, 
+                                };
+
+
+                if (departmentEl.value === "VIP") {
+                    event.vip.push(newPersonObj);
+                } else {
+
+                    if (!event.employees[departmentEl.value]) {
+                        event.employees[departmentEl.value] = [];
+                    }
+
+                    event.employees[departmentEl.value].push(newPersonObj);
+
+                }
+                
+                localStorage.setItem('event', JSON.stringify(event));
+                         
+                nameEl.value = '';
+                               
+            
+            } catch (error) {
+                alert(error.message);        
+            }
+
+            }
+
+    </script>
+</body>
+</html>
